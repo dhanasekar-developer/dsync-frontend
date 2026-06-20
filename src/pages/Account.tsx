@@ -55,7 +55,7 @@ export default function Account() {
     const {
         register,
         handleSubmit,
-        formState: { errors, isSubmitting, isDirty },
+        formState: { errors, isSubmitting },
     } = useForm({
         resolver: zodResolver(profileSchema),
         mode: 'onTouched',

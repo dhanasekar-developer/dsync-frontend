@@ -1,4 +1,4 @@
-import type { ChatInterface, ParticipantMessageStatus, MessagesInterface, LocalMessageStatus } from './interfaces'
+import type { ChatInterface, MessagesInterface, LocalMessageStatus } from './interfaces'
 import { useCurrentUserQuery } from '../store/services/authApi'
 import { FiClock } from 'react-icons/fi'
 import { PiChecksBold } from 'react-icons/pi'
@@ -6,7 +6,6 @@ import { PiChecksBold } from 'react-icons/pi'
 import dayjs from 'dayjs';
 import isSameOrBefore from 'dayjs/plugin/isSameOrBefore'
 import { RxCheck } from 'react-icons/rx'
-import type { MenuProps } from 'antd';
 
 dayjs.extend(isSameOrBefore)
 

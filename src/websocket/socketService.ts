@@ -76,9 +76,9 @@ class SocketService {
             this.notify(data)
         }
 
-        this.socket.onerror = (err) => {
+        // this.socket.onerror = (err) => {
             // console.log('web socket error:', err)
-        }
+        // }
 
         this.socket.onclose = (event) => {
 
