@@ -62,7 +62,7 @@ class SocketService {
     private createConnection() {
 
         this.socket = new WebSocket(
-            `ws://localhost:8000/ws/?token=${this.token}`
+            `${import.meta.env.VITE_API_BASE_URL}ws/?token=${this.token}`
         )
 
         this.socket.onopen = () => {
