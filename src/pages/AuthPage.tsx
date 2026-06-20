@@ -143,12 +143,11 @@ const AuthPage = () => {
                             <input
                                 {...register('email')}
                                 type="email"
-                                placeholder="name@example.com"
+                                placeholder="user@gmail.com"
                                 className={inputClass}
                                 onInput={() => clearErrors('email')}
                                 onBlur={() => validateField('email')}
                                 autoComplete='email'
-                                defaultValue={'dhana@gmail.com'}
                             />
                         </div>
                         <ErrorContainer message={errors?.email?.message} />
@@ -168,7 +167,6 @@ const AuthPage = () => {
                                 onInput={() => clearErrors('password')}
                                 onBlur={() => validateField('password')}
                                 autoComplete='password'
-                                defaultValue={'dhana@123'}
                             />
                             <button
                                 type="button"
