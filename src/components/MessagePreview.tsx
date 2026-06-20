@@ -22,7 +22,7 @@ export default function MessagePreview({ message, chat, messageStatus }: { messa
                     {!isYou && <span className="font-bold text-xs capitalize">{chat?.name}</span>}
                     <span className="text-[10px] text-slate-400">{dayjs(message.created_at).format('hh:mm A')}</span>
                 </div>
-                <div className={`p-3 rounded-2xl text-sm shadow-sm relative ${isYou ? 'bg-blue-100 text-blue-900 rounded-tr-none pr-5 pb-3.5' : 'bg-white border border-slate-100 rounded-tl-none'}`}>
+                <div className={`p-3 rounded-2xl text-sm shadow-sm relative w-fit ${isYou ? 'bg-blue-100 text-blue-900 rounded-tr-none pr-5 pb-3.5' : 'bg-white border border-slate-100 rounded-tl-none'}`}>
                     {message.message_text}
                     {(isYou && chat?.chat_type == 'private') &&
                         <span className="absolute bottom-2 right-1">

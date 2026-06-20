@@ -15,13 +15,14 @@ import { successToast } from '../utils/toast';
 import logo from '../assets/logo.png';
 
 const loginSchema = {
-    email: z.email({ message: 'Please enter valid email address' }),
-    password: z.string().min(8, { message: 'Password must be atleast 8 characters' })
+    email: z.email({ message: 'Please enter valid email address!' }),
+    password: z.string().min(1, { message: 'Password is required!' })
 }
 
 const signupSchema = {
     name: z.string().min(1, { message: 'Name is required!' }),
-    ...loginSchema
+    email: z.email({ message: 'Please enter valid email address!' }),
+    password: z.string().min(8, { message: 'Password must be atleast 8 characters!' })
 }
 
 const inputClass = 'w-full pl-12 pr-12 py-2.5 bg-slate-50 border border-slate-200 focus:border-slate-300 focus:shadow-sm rounded-2xl focus:outline-none transition-all text-slate-600'
