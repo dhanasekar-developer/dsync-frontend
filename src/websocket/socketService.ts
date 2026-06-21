@@ -14,6 +14,10 @@ class SocketService {
 
     private refreshing: boolean = false;
 
+    private isReadySent = false;
+
+    private cachedPresenceSync: any = null
+
     private refreshTokenFun: (() => Promise<string | null>) | null = null
 
     setRefreshTokenFun(fn: () => Promise<string | null>) {
@@ -37,6 +41,10 @@ class SocketService {
 
     subscribe(callback: (data: any) => void) {
         this.listeners.add(callback)
+
+        if(this.cachedPresenceSync){
+            callback(this.cachedPresenceSync)
+        }
 
         return () => { this.listeners.delete(callback) }
     }
@@ -68,11 +76,21 @@ class SocketService {
         this.socket.onopen = () => {
             // console.log('web socket connected')
             this.reconnectAttempts = 0;
+
+            if(!this.isReadySent){
+                this.send({ type: 'ready' })
+                this.isReadySent = true
+            }
         }
 
         this.socket.onmessage = (event) => {
             const data = JSON.parse(event.data)
             // console.log('socket messsage:', data)
+
+            if(data.type == 'presence_sync'){
+                this.cachedPresenceSync = data
+            }
+
             this.notify(data)
         }
 

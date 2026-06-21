@@ -52,11 +52,8 @@ export default function SearchBox() {
 
             try {
                 setLoading(true);
-
                 const result = await fetchUsers({ search: searchText.trim() }).unwrap()
-
                 const users = makeUsersList(result)
-
                 setOptions(users);
             }
             catch (error) {

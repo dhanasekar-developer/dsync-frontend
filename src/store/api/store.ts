@@ -3,12 +3,14 @@ import apiSlice from "./apiSlice";
 import messageReducer from '../services/messageSlice'
 import menuReducer from '../services/menuSlice'
 import authReducer from '../services/authSlice'
+import usersPresenceReducer from '../services/usersPresenceSlice'
 
 const appReducer = combineReducers({
     [apiSlice.reducerPath]: apiSlice.reducer,
     message: messageReducer,
     menu: menuReducer,
     auth: authReducer,
+    usersPresence: usersPresenceReducer,
 })
 
 const rootReducer = ( state: ReturnType<typeof appReducer> | undefined, action: any ) => {

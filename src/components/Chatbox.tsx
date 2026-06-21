@@ -4,20 +4,28 @@ import React, { useEffect, useMemo, useRef } from 'react';
 import MessageSendbar from './MessageSendbar';
 import { getActiveChatId } from '../store/services/messageSlice';
 import { useAppDispatch, useAppSelector } from '../store/api/hooks';
-import dayjs from 'dayjs';
 import { useCurrentUserQuery } from '../store/services/authApi';
 import { chatApi, useFetchChatParticipantQuery } from '../store/services/chatApi';
 import socketService from '../websocket/socketService';
 import { type MenuProps } from 'antd';
 import HoverToView from './HoverToView';
 import { Avatar } from '../utils/getAvatar';
+import { useSelector } from 'react-redux';
+import { getUsersPresence } from '../store/services/usersPresenceSlice';
 
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime'
+
+dayjs.extend(relativeTime)
 
 export default function Chatbox({ messages, chat }: { messages?: MessagesInterface[], chat?: ChatInterface }) {
     const dispatch = useAppDispatch()
     const activeChatId = useAppSelector(getActiveChatId)
+    const usersPresence = useSelector(getUsersPresence)
     const { data: userData } = useCurrentUserQuery()
     const { data: chatParticipants } = useFetchChatParticipantQuery({ chat_id: chat?.chat_id! }, { skip: !chat?.chat_id })
+
+    const isPrivateChat = chat?.chat_type == 'private'
 
     const msgContainerRef = useRef<HTMLDivElement | null>(null)
     let lastDate: string = ''
@@ -27,7 +35,16 @@ export default function Chatbox({ messages, chat }: { messages?: MessagesInterfa
         msgContainerRef.current.scrollTop = msgContainerRef.current.scrollHeight
     }, [messages])
 
-    const otherParticipants = chatParticipants?.filter(e => e.user_id != userData?.user_id)
+    const otherParticipants = useMemo(() => chatParticipants?.filter(e => e.user_id != userData?.user_id), [chatParticipants, userData?.user_id])
+
+    const userPresence = useMemo(() => {
+        if(isPrivateChat){
+            return usersPresence.find(e => e.user_id == otherParticipants?.[0].user_id)
+        }
+        return null
+    }, [usersPresence, chatParticipants])
+
+    console.log('userPresence:--',userPresence)
 
     useEffect(() => {
         if(document.visibilityState != 'visible') return;
@@ -72,7 +89,7 @@ export default function Chatbox({ messages, chat }: { messages?: MessagesInterfa
         messages?.forEach((message) => {
             if (message.sender_id != userData?.user_id) return;
 
-            if (chat?.chat_type != 'group') return;
+            if (isPrivateChat) return;
 
             result[message.id] = otherParticipants?.map((e) => ({
                                     key: e.user_id,
@@ -93,6 +110,9 @@ export default function Chatbox({ messages, chat }: { messages?: MessagesInterfa
                     <Avatar name={chat?.name!} image={chat?.image} className="size-10!" />
                     <div>
                         <h3 className="font-bold text-sm capitalize">{chat?.name}</h3>
+                        {isPrivateChat &&
+                            <p className={`text-[12px] ${userPresence?.is_online ? 'text-green-500' : 'text-gray-400'} italic font-medium`}>{userPresence?.is_online ? 'online' : dayjs(userPresence?.last_seen).fromNow() }</p>
+                        }
                         {/* <p className="text-[11px] text-blue-500 italic">Mas Happy Typing....</p> */}
                     </div>
                 </div>

@@ -126,7 +126,7 @@ const AuthPage = () => {
                                 <input
                                     {...register('name')}
                                     type="text"
-                                    placeholder="John Doe"
+                                    placeholder="User Name"
                                     className={inputClass}
                                     onInput={() => clearErrors('name')}
                                     onBlur={() => validateField('name')}

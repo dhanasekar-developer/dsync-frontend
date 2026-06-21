@@ -4,6 +4,7 @@ import { useAppDispatch } from "../store/api/hooks"
 import { messageApi } from "../store/services/messageApi"
 import { chatApi } from "../store/services/chatApi"
 import { useCurrentUserQuery } from "../store/services/authApi"
+import { setUsersPrecence, updateUserPrecence } from "../store/services/usersPresenceSlice"
 
 
 export const SocketListener = () => {
@@ -13,9 +14,8 @@ export const SocketListener = () => {
     useEffect(() => {
 
         const unsubscribe = socketService.subscribe((message) => {
-
+            console.log('message:',message)
             switch (message.type) {
-
                 case 'new_message':
                     dispatch(
                         messageApi.util.updateQueryData(
@@ -52,7 +52,6 @@ export const SocketListener = () => {
                         )
                     )
                     if (message.sender_id != userData?.user_id) {
-                        console.log(message.sender_id, userData?.user_id)
                         socketService.send({
                             type: 'message_delivered',
                             chat_id: message.chat_id,
@@ -87,6 +86,18 @@ export const SocketListener = () => {
                     )
                     break;
                 
+                case 'presence_sync':
+
+                    dispatch(setUsersPrecence(message?.users))
+
+                    break;
+
+                case 'presence_update':
+
+                    dispatch(updateUserPrecence(message?.data))
+
+                    break;
+
             }
 
         })
